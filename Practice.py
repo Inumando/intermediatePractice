@@ -107,8 +107,9 @@ def separate(listObj):
 def listCreator(kinds, obj1, obj2):
     output = []
     for i in kinds:
-        aux = [e for e,s in zip(obj1, obj2) if i in str(s).split(';') and not mt.isnan(e)]
+        aux = [int(e) for e,s in zip(obj1, obj2) if i in str(s).split(';') and not mt.isnan(e)]
         output.append(aux)
+    output.sort()
     return output
         
     
@@ -121,7 +122,7 @@ sexo = data['Gender'].tolist()
 gend = separate(sexo)
 genders = listCreator(gend, salary, sexo)
 
-def quest01(listaMax):
+def quest01(listaMax, types, count):
     mini = listaMax[0]
     maxi = listaMax[-1]
     fq = percentil(listaMax, 1)
@@ -133,10 +134,14 @@ def quest01(listaMax):
           + '\nPromedio: ' + str(promedio))
     plt.figure()
     plt.boxplot(listaMax)
+    plt.suptitle(types[counter], fontsize=16)
+    count += 1
+    return count
 
+counter = 0
 for i in range(len(gend)):
     print('\nDatos para ' + gend[i] + ': ')
-    quest01(genders[i])
+    counter = quest01(genders[i], gend, counter)
     
 #Quest Numero 2----------------------------------------------------------------
 ethnicity = data['Ethnicity'].tolist()
@@ -145,12 +150,24 @@ ethnicity = data['Ethnicity'].tolist()
 etnias = separate(ethnicity)
 listaEtnias = listCreator(etnias, salary, ethnicity)
 
+counter = 0
 for i in range(len(etnias)):
     print('\nDatos para ' + etnias[i] + ': ')
-    quest01(listaEtnias[i])
+    counter = quest01(listaEtnias[i], etnias, counter)
 
 #Quest03-----------------------------------------------------------------------
+devType = data['DevType'].tolist()
 
+#Crear listas
+devSep = separate(devType)
+devList = listCreator(devSep, salary, devType)
+
+counter = 0
+for i in range(len(devSep)):
+    print('\nDatos para ' + devSep[i] + ': ')
+    counter = quest01(devList[i], devSep, counter)
+
+#Quest4------------------------------------------------------------------------
 
 
 
