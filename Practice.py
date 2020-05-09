@@ -93,22 +93,33 @@ wf = 'C:\\Users\\inu_s\\Documents\\Escuela\\2020\\MineriaDeDatos\\intermediatePr
 file = wf + '\survey_results_public.csv'
 data = pd.read_csv(file, encoding = 'utf-8')
 
+#Funcion que separa las columnas por tipo u opccion
+def separate(listObj):
+    output = []
+    for i in listObj:
+        aux = str(i).split(';')
+        for j in aux:
+            if j not in output and j != 'nan':
+                output.append(j)
+    return output
+
+#Función que crea las listas
+def listCreator(kinds, obj1, obj2):
+    output = []
+    for i in kinds:
+        aux = [e for e,s in zip(obj1, obj2) if i in str(s).split(';') and not mt.isnan(e)]
+        output.append(aux)
+    return output
+        
+    
+
 #Quest Numero 1----------------------------------------------------------------
 salary = data['ConvertedComp'].tolist()
 sexo = data['Gender'].tolist()
 
-#Lista Hombres
-h = [e for e,s in zip(salary, sexo) if 'Man' in str(s).split(';') and not mt.isnan(e)]
-
-print(h[0])
-#Lista Mujeres
-m = [e for e,s in zip(salary, sexo) if 'Woman' in str(s).split(';') and not mt.isnan(e)]
-
-
-#lista otros
-otros = [e for e,s in zip(salary, sexo) 
-if 'Non-binary, genderqueer, or gender non-conforming' in str(s).split(';') and not mt.isnan(e)]
-
+#Crear listas
+gend = separate(sexo)
+genders = listCreator(gend, salary, sexo)
 
 def quest01(listaMax):
     mini = listaMax[0]
@@ -123,41 +134,34 @@ def quest01(listaMax):
     plt.figure()
     plt.boxplot(listaMax)
 
-print('\nDatos para hombres:')
-quest01(h)
-print('\nDatos para Mujeres:')
-quest01(m)
-print('\nDatos para otros: ')
-quest01(otros)
-
+for i in range(len(gend)):
+    print('\nDatos para ' + gend[i] + ': ')
+    quest01(genders[i])
+    
 #Quest Numero 2----------------------------------------------------------------
 ethnicity = data['Ethnicity'].tolist()
 
-african = [e for e,s in zip(salary, ethnicity) if 'Black or of African descent' in str(s).split(';') and not mt.isnan(e)]
-asian = [e for e,s in zip(salary, ethnicity) if 'East Asian' in str(s).split(';') and not mt.isnan(e)]
-latino = [e for e,s in zip(salary, ethnicity) if 'Hispanic or Latino/Latina' in str(s).split(';') and not mt.isnan(e)]
-eastern = [e for e,s in zip(salary, ethnicity) if 'Middle Eastern' in str(s).split(';') and not mt.isnan(e)]
-native = [e for e,s in zip(salary, ethnicity) if 'Native American, Pacific Islander, or Indigenous Australian' in str(s).split(';') and not mt.isnan(e)]
-southAsian = [e for e,s in zip(salary, ethnicity) if 'South Asian' in str(s).split(';') and not mt.isnan(e)]
-european = [e for e,s in zip(salary, ethnicity) if 'White or of European descent' in str(s).split(';') and not mt.isnan(e)]
-biracial = [e for e,s in zip(salary, ethnicity) if 'Biracial' in str(s).split(';') and not mt.isnan(e)]
-multiracial = [e for e,s in zip(salary, ethnicity) if 'Multiracial' in str(s).split(';') and not mt.isnan(e)]
+#Crear listas
+etnias = separate(ethnicity)
+listaEtnias = listCreator(etnias, salary, ethnicity)
 
-print('\nDatos para africanos:')
-quest01(african)
-print('\nDatos para Asiaticos:')
-quest01(asian)
-print('\nDatos para latinos:')
-quest01(latino)
-print('\nDatos para Medio oeste:')
-quest01(eastern)
-print('\nDatos para Nativos Americanos:')
-quest01(native)
-print('\nDatos para Sur Asiaticos:')
-quest01(southAsian)
-print('\nDatos para Europeos:')
-quest01(european)
-print('\nDatos para Biracial:')
-quest01(biracial)
-print('\nDatos para Multiracial:')
-quest01(multiracial)
+for i in range(len(etnias)):
+    print('\nDatos para ' + etnias[i] + ': ')
+    quest01(listaEtnias[i])
+
+#Quest03-----------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
